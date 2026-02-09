@@ -7,4 +7,4 @@ Pacote Python para análise de expoentes de Lyapunov, desenvolvido por Ennio dos
 Para instalar o pacote diretamente do GitHub, utilize o pip:
 
 ```bash
-pip install git+[https://github.com/EnniodosSantos/lyapupy.git](https://github.com/EnniodosSantos/lyapupy.git)
+pip install git+https://github.com/EnniodosSantos/lyapupy.git
