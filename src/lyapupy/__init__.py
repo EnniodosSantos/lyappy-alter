@@ -1,1 +1,1 @@
-from .lyapupy import *
+from .lyapy import *
