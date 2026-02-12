@@ -105,6 +105,35 @@ class ChaoticMap:
         plt.grid(True, alpha=0.3)
         plt.show()
 
+def lyapunov_summary(self, dec=False):
+        """
+        Gera um resumo completo.
+        Se dec=True, mantém alta precisão (Decimal) em todos os campos numéricos.
+        """
+        # Repassa o parâmetro dec para os cálculos e para a série
+        est = self.lyapunov_estimated(dec=dec)
+        series = self.time_series(dec=dec)
+
+        # Valor teórico
+        theo_val = self.theoretical_lyapunov
+        theo = theo_val if dec else float(theo_val)
+
+        # Cálculo do erro (sempre feito em Decimal internamente para precisão)
+        theo_dec = dc.Decimal(str(theo_val))
+        est_dec = dc.Decimal(str(est))
+        error = abs((est_dec - theo_dec) / theo_dec) * 100 if theo_dec != 0 else dc.Decimal(0)
+
+        return {
+            "map": self.__class__.__name__,
+            "theoretical": theo,
+            "estimated": est,
+            "error_percent": f"{error:.8f}%" if dec else f"{float(error):.4f}%",
+            "steps": self.steps,
+            "transient": self.trans,
+            "x0": self.x0 if dec else float(self.x0),
+            "time_series": series
+        }
+
 
 class LogisticMap(ChaoticMap):
     domain = (0, 1)
@@ -112,6 +141,7 @@ class LogisticMap(ChaoticMap):
     def f(self, x): return dc.Decimal('4') * x * (1 - x)
     def df(self, x): return dc.Decimal('4') * (1 - 2 * x)
 
+    @property
     def theoretical_lyapunov(self):
         return dc.Decimal('2').ln()
 
@@ -119,6 +149,8 @@ class UlamMap(ChaoticMap):
     domain = (-1, 1)
     def f(self, x): return dc.Decimal('1') - dc.Decimal('2') * x**2
     def df(self, x): return dc.Decimal('-4') * x
+
+    @property
     def theoretical_lyapunov(self): return dc.Decimal('2').ln()
 
 
@@ -128,6 +160,7 @@ class BernoulliMap(ChaoticMap):
     def f(self, x): return (2 * x) % dc.Decimal(1)
     def df(self, x): return dc.Decimal(2)
 
+    @property
     def theoretical_lyapunov(self):
         return dc.Decimal('2').ln()
 
@@ -145,6 +178,7 @@ class GaussMap(ChaoticMap):
         if x == 0: return dc.Decimal(0)
         return -1 / (x**2)
 
+    @property
     def theoretical_lyapunov(self):
         ctx = dc.getcontext()
         pi = ctx.create_decimal_from_float(math.pi)
@@ -157,6 +191,7 @@ class TentMap(ChaoticMap):
 
     def df(self, x): return dc.Decimal('2') if x < 0.5 else -dc.Decimal('2')
 
+    @property
     def theoretical_lyapunov(self):
         return dc.Decimal('2').ln()
 
@@ -167,6 +202,7 @@ class AsymetricMap(ChaoticMap):
     def f(self, x): return (x / dc.Decimal('0.4')) if x < dc.Decimal('0.4') else ((1 - x) / (1 - dc.Decimal('0.4')))
     def df(self, x): return (1 / dc.Decimal('0.4')) if x < dc.Decimal('0.4') else (-1 / (1 - dc.Decimal('0.4')))
 
+    @property
     def theoretical_lyapunov(self):
         return -(dc.Decimal('0.4') * dc.Decimal('0.4').ln()) - ((1 - dc.Decimal('0.4')) * (1 - dc.Decimal('0.4')).ln())
 
@@ -175,4 +211,6 @@ class ChebyshevMap(ChaoticMap):
     domain = (-1, 1)
     def f(self, x): return dc.Decimal('2') * x**2 - dc.Decimal('1')
     def df(self, x): return dc.Decimal('4') * x
+
+    @property
     def theoretical_lyapunov(self): return dc.Decimal('2').ln()
