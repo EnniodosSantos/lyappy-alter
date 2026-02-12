@@ -24,7 +24,7 @@ class ChaoticMap:
         a, b = self.domain
         return dc.Decimal(str(random.uniform(a, b)))
 
-    def estimate_lyapunov(self, dec=False):
+    def lyapunov_estimated(self, dec=False):
 
         x = self.x0
         soma = dc.Decimal(0)
