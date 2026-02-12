@@ -105,7 +105,7 @@ class ChaoticMap:
         plt.grid(True, alpha=0.3)
         plt.show()
 
-def lyapunov_summary(self, dec=False):
+    def lyapunov_summary(self, dec=False):
         """
         Gera um resumo completo.
         Se dec=True, mantém alta precisão (Decimal) em todos os campos numéricos.
