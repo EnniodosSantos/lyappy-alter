@@ -68,7 +68,7 @@ class ChaoticMap:
     def _plot_convergence(self, data):
         plt.figure(figsize=(8, 4))
         plt.plot(data, label="Estimated $\lambda$")
-        plt.axhline(float(self.theoretical_lyapunov()), color='r', ls='--', label="Theoretical")
+        plt.axhline(float(self.theoretical_lyapunov), color='r', ls='--', label="Theoretical")
         plt.title(f"Lyapunov Convergence - {self.__class__.__name__}")
         plt.xlabel("Iterations")
         plt.ylabel("$\lambda$")
