@@ -17,9 +17,9 @@ class ChaoticMap:
         self.x0 = dc.Decimal(str(x0)) if x0 is not None else self.__get_initial_condition()
 
     def __repr__(self):
-        # Isso resolve aquela saída estranha que você viu antes
         return f"<{self.__class__.__name__}: x0={self.x0:.4f}, steps={self.steps}, trans={self.trans}>"
 
+    # Renomeado para __ para ocultar do usuário
     def __get_initial_condition(self):
         a, b = self.domain
         return dc.Decimal(str(random.uniform(a, b)))
