@@ -131,8 +131,7 @@ class ChaoticMap:
             "steps": self.steps,
             "transient": self.trans,
             "x0": self.x0 if dec else float(self.x0),
-            "time_series": series
-        }
+            "time_series": series}
 
 
 class LogisticMap(ChaoticMap):
@@ -144,6 +143,7 @@ class LogisticMap(ChaoticMap):
     @property
     def theoretical_lyapunov(self):
         return dc.Decimal('2').ln()
+
 
 class UlamMap(ChaoticMap):
     domain = (-1, 1)
