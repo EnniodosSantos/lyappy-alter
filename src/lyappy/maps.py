@@ -214,3 +214,24 @@ class ChebyshevMap(ChaoticMap):
 
     @property
     def theoretical_lyapunov(self): return dc.Decimal('2').ln()
+
+class GeneralizedBernoulliMap(ChaoticMap):
+    domain = (0, 1)
+
+    def __init__(self, steps, trans, m=2, x0=None, prec=50, seed=None):
+        # m é o multiplicador (slope) do mapa
+        self.m = dc.Decimal(str(m))
+        super().__init__(steps, trans, x0, prec, seed)
+
+    def f(self, x):
+        # {mx} = (m * x) % 1
+        return (self.m * x) % dc.Decimal('1')
+
+    def df(self, x):
+        # A derivada é constante e igual a m em quase todo o domínio
+        return self.m
+
+    @property
+    def theoretical_lyapunov(self):
+        # Para o mapa de Bernoulli generalizado, lambda = ln(m)
+        return self.m.ln()
