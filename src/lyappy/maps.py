@@ -133,21 +133,26 @@ class ChaoticMap:
             "x0": self.x0 if dec else float(self.x0),
             "time_series": series}
 
-
 class LogisticMap(ChaoticMap):
     domain = (0, 1)
 
     def __init__(self, steps, trans, r=4, x0=None, prec=50, seed=None):
-        # m é o multiplicador (slope) do mapa
-        self.m = dc.Decimal(str(r))
+        self.r = dc.Decimal(str(r))
         super().__init__(steps, trans, x0, prec, seed)
 
-    def f(self, x): return r * x * (1 - x)
-    def df(self, x): return r * (1 - 2 * x)
+    # Correção: usar self.r em vez de r
+    def f(self, x):
+        return self.r * x * (dc.Decimal('1') - x)
+
+    def df(self, x):
+        return self.r * (dc.Decimal('1') - dc.Decimal('2') * x)
 
     @property
     def theoretical_lyapunov(self):
-        return dc.Decimal('2').ln()
+        # Para r=4, o valor teórico é ln(2)
+        if self.r == dc.Decimal('4'):
+            return dc.Decimal('2').ln()
+        return None # Lyapunov varia para r < 4
 
 
 class UlamMap(ChaoticMap):
