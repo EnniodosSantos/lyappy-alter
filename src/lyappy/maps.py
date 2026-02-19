@@ -137,8 +137,13 @@ class ChaoticMap:
 class LogisticMap(ChaoticMap):
     domain = (0, 1)
 
-    def f(self, x): return dc.Decimal('4') * x * (1 - x)
-    def df(self, x): return dc.Decimal('4') * (1 - 2 * x)
+    def __init__(self, steps, trans, r=4, x0=None, prec=50, seed=None):
+        # m é o multiplicador (slope) do mapa
+        self.m = dc.Decimal(str(r))
+        super().__init__(steps, trans, x0, prec, seed)
+
+    def f(self, x): return r * x * (1 - x)
+    def df(self, x): return r * (1 - 2 * x)
 
     @property
     def theoretical_lyapunov(self):
